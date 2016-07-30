@@ -6,11 +6,11 @@
     <form ng-submit="createNewUser()">
       <div class="form-group">
         <label>Email Address</label>
-        <input require type="email" class="form-control" placeholder="Email" ng-model="newEmail">
+        <input type="email" class="form-control" placeholder="Email" ng-model="newEmail" required>
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" class="form-control" placeholder="Password" ng-model="newPassword">
+        <input type="password" class="form-control" placeholder="Password" ng-model="newPassword" required minlength="6">
       </div>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
