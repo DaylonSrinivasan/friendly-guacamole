@@ -1,36 +1,35 @@
 <!DOCTYPE HTML>
 <html>
- <body>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script type="text/javascript" src="firebase.js"></script>
+<body>
 
-   <button onclick="myFunction()">Click me</button>
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <chat-room></chat-room>
+    <input type="text" ng-model="message"></input>
+    <button ng-click="update()">Submit</button>
+  </div>
 
- <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
- <script>
-   // Initialize Firebase
-   var config = {
-     apiKey: "AIzaSyADoUMDd759jMrXsBx1XYjlCC37aIQe9XY",
-     authDomain: "friendly-guacamole.firebaseapp.com",
-     databaseURL: "https://friendly-guacamole.firebaseio.com",
-     storageBucket: "friendly-guacamole.appspot.com",
-   };
-   firebase.initializeApp(config);
-   var database = firebase.database();
- </script>
+  <script>
+  var app = angular.module('myApp', []);
+  app.directive('chatRoom', function() {
+    return {
+      template: "<div id='myChatRoom'></div>"
+    };
+  });
+  app.controller('myCtrl', function($scope, $element, $attrs) {
+    database.ref('chat').on('child_added', function(data) {
+      var p = angular.element("<p>" +data.val() +"</p");
 
-    <script>
-
-    function writeUserData(userId, name, email, imageUrl) {
-      firebase.database().ref('users/' + userId).set({
-      username: name,
-      email: email,
-      profile_picture : imageUrl
+      $element.find('div').append(p);
     });
-  }
-    function myFunction() {
-      var btn = document.createElement("BUTTON");
-      document.body.appendChild(btn);
-      writeUserData('me', 'you', 'him', 'her');
+    $scope.update = function() {
+      database.ref('chat').push($scope.message);
     }
-    </script>
- </body>
+  });
+  </script>
+
+
+</body>
 </html>
