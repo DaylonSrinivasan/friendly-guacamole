@@ -22,4 +22,11 @@ app.controller('myCtrl', function($scope, $element, $attrs) {
       });
     }
   }
+  $scope.signOut = function() {
+    firebase.auth().signOut().then(function() {
+      console.log("sign out successful");
+    }, function(error) {
+      console.log("error message: " + error.message);
+    });
+  }
 });
