@@ -2,7 +2,7 @@
 <html>
 <body>
   <div ng-app="myApp" ng-controller="myCtrl">
-<div class="container">
+<div class="container" ng-hide="userOn">
   <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#signUpTab">Sign Up</a></li>
     <li><a data-toggle="tab" href="#signInTab">Sign In</a></li>
