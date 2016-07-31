@@ -8,7 +8,9 @@ app.directive('chatRoom', function() {
 });
 app.controller('myCtrl', function($scope, $window, $element, $attrs) {
   firebase.database().ref('chat').on('child_added', function(data) {
-    var p = angular.element('<p>' + data.val() + '</p>');
+    var p = angular.element('<p>' + data.val().user +": " + data.val().message + '</p>');
+    console.log(data.val().author);
+    console.log(data.val().message);
     $element.find('#myChatRoom').append(p);
     });
 
@@ -27,7 +29,7 @@ app.controller('myCtrl', function($scope, $window, $element, $attrs) {
 
   $scope.$watch('userOn');
   $scope.update = function() {
-    firebase.database().ref('chat').push($scope.message);
+    firebase.database().ref('chat').push({'user': $scope.userEmail, 'message': $scope.message});
   }
   $scope.createNewUser = function() {
     firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password).catch(function(error) {
