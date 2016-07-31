@@ -2,15 +2,12 @@ var app = angular.module('myApp', []);
 app.directive('chatRoom', function() {
   return {
     template: "<div id='myChatRoom'></div>" +
-    "<input type='text' ng-model='message'></input>" +
-    "<button ng-click='update()'>Submit</button>"
+    "<input type='text' ng-model='message' ng-keypress='checkEnter($event)' class='form-control' placeholder='Say something!'></input>"
   };
 });
 app.controller('myCtrl', function($scope, $window, $element, $attrs) {
   firebase.database().ref('chat').on('child_added', function(data) {
     var p = angular.element('<p><strong>' + data.val().user +": </strong>" + data.val().message + '</p>');
-    console.log(data.val().author);
-    console.log(data.val().message);
     $element.find('#myChatRoom').append(p);
     });
 
@@ -27,8 +24,13 @@ app.controller('myCtrl', function($scope, $window, $element, $attrs) {
     $scope.$digest();
   });
 
-  $scope.$watch('userOn');
-  $scope.update = function() {
+  $scope.checkEnter = function($event) {
+    if($event.charCode == 13){ //enter key
+      $scope.sendMessage();
+      $scope.message = "";
+    }
+  }
+  $scope.sendMessage = function() {
     firebase.database().ref('chat').push({'user': $scope.userEmail, 'message': $scope.message});
   }
   $scope.createNewUser = function() {
@@ -36,6 +38,9 @@ app.controller('myCtrl', function($scope, $window, $element, $attrs) {
       //Handle Errors
       console.log("error code: " + error.code);
       console.log("error message: " + error.message);
+      $("#error").show();
+      $scope.errorText = error.message;
+      $scope.$digest();
     });
   }
 
@@ -44,6 +49,9 @@ app.controller('myCtrl', function($scope, $window, $element, $attrs) {
       //Handle Errors
       console.log("error code: " + error.code);
       console.log("error message: " + error.message);
+      $scope.errorText = error.message;
+      $("#error").show();
+      $scope.$digest();
     })
   }
   $scope.signOut = function() {

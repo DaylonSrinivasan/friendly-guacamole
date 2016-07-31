@@ -22,6 +22,9 @@
                 <label>Password</label>
                 <input type="password" class="form-control" placeholder="Password" ng-model="password" required minlength="6">
               </div>
+              <div id="error" hidden class="alert alert-danger fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{errorText}}
+              </div>
               <button type="submit" class="btn btn-default">Submit</button>
             </div>
           </form>
@@ -39,6 +42,10 @@
                 <label>Password</label>
                 <input type="password" class="form-control" placeholder="Password" ng-model="password" required minlength="6">
               </div>
+              <div id="error" hidden class="alert alert-danger fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{errorText}}
+              </div>
+
               <button type="submit" class="btn btn-default">Submit</button>
             </div>
           </form>
@@ -71,6 +78,5 @@
   <script type="text/javascript" src="angular.js"></script>
   <script type="text/javascript" src="firebase.js"></script>
 
-  <!--main app-->
 </body>
 </html>
