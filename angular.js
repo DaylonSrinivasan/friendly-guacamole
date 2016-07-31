@@ -1,20 +1,22 @@
 var app = angular.module('myApp', []);
 app.directive('chatRoom', function() {
   return {
-    template: "<div id='myChatRoom'></div>"
+    template: "<div id='myChatRoom'></div>" +
+    "<input type='text' ng-model='message'></input>" +
+    "<button ng-click='update()'>Submit</button>"
   };
 });
 app.controller('myCtrl', function($scope, $window, $element, $attrs) {
   firebase.database().ref('chat').on('child_added', function(data) {
-    var p = angular.element("<p>" +data.val() +"</p");
-
-    $element.find('div').append(p);
-  });
+    var p = angular.element('<p>' + data.val() + '</p>');
+    $element.find('#myChatRoom').append(p);
+    });
 
   firebase.auth().onAuthStateChanged(function(user) {
     if(user) {
       console.log("User on");
       $scope.userOn = true;
+      $scope.userEmail = user.email;
     }
     else{
       console.log("No user");
