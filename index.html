@@ -10,8 +10,9 @@
     <div class="tab-content">
       <div id="signUpTab" class="tab-pane fade in active">
         <form ng-submit="createNewUser()">
-          <div ng-include"'email_and_password_template.html'">
-            <!--temp
+          <!--div ng-include"'email_and_password_template.html'"-->
+
+          <!--temp-->
           <div class="container">
             <div class="form-group">
               <label>Email Address</label>
@@ -23,13 +24,12 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
           </div>
-        -->
         </form>
       </div>
       <div id="signInTab" class="tab-pane fade">
         <form ng-submit="signInUser()">
-          <div ng-include="'email_password_template.html'">
-            <!-- temp
+          <!--div ng-include="'email_password_template.html'"-->
+            <!-- temp -->
           <div class="container">
             <div class="form-group">
               <label>Email Address</label>
@@ -41,7 +41,6 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
           </div>
-        -->
         </form>
       </div>
     </div>
