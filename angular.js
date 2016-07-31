@@ -4,23 +4,43 @@ app.directive('chatRoom', function() {
     template: "<div id='myChatRoom'></div>"
   };
 });
-app.controller('myCtrl', function($scope, $element, $attrs) {
+app.controller('myCtrl', function($scope, $window, $element, $attrs) {
   firebase.database().ref('chat').on('child_added', function(data) {
     var p = angular.element("<p>" +data.val() +"</p");
 
     $element.find('div').append(p);
   });
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if(user) {
+      console.log("User on");
+      $scope.userOn = true;
+    }
+    else{
+      console.log("No user");
+      $scope.userOn = false;
+    }
+    $scope.$digest();
+  });
+
+  $scope.$watch('userOn');
   $scope.update = function() {
     firebase.database().ref('chat').push($scope.message);
   }
   $scope.createNewUser = function() {
-    if($scope.newEmail && $scope.newPassword) {
-      firebase.auth().createUserWithEmailAndPassword($scope.newEmail, $scope.newPassword).catch(function(error) {
-        //Handle Errors
-        console.log("error code: " + error.code);
-        console.log("error message: " + error.message);
-      });
-    }
+    firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password).catch(function(error) {
+      //Handle Errors
+      console.log("error code: " + error.code);
+      console.log("error message: " + error.message);
+    });
+  }
+
+  $scope.signInUser = function() {
+    firebase.auth().signInWithEmailAndPassword($scope.email, $scope.password).catch(function(error) {
+      //Handle Errors
+      console.log("error code: " + error.code);
+      console.log("error message: " + error.message);
+    })
   }
   $scope.signOut = function() {
     firebase.auth().signOut().then(function() {
