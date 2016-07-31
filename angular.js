@@ -8,7 +8,7 @@ app.directive('chatRoom', function() {
 });
 app.controller('myCtrl', function($scope, $window, $element, $attrs) {
   firebase.database().ref('chat').on('child_added', function(data) {
-    var p = angular.element('<p>' + data.val().user +": " + data.val().message + '</p>');
+    var p = angular.element('<p><strong>' + data.val().user +": </strong>" + data.val().message + '</p>');
     console.log(data.val().author);
     console.log(data.val().message);
     $element.find('#myChatRoom').append(p);
