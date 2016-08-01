@@ -1,0 +1,16 @@
+<form ng-submit="createNewUser()">
+  <div class="container">
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" class="form-control" placeholder="Email" ng-model="$parent.signUpEmail" required></input>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" class="form-control" placeholder="Password" ng-model="$parent.signUpPassword" required minlength="6"></input>
+    </div>
+    <div id="signUpError" hidden class="alert alert-danger fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{errorText}}
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </div>
+</form>

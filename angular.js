@@ -13,12 +13,16 @@ app.controller('myCtrl', function($scope, $window, $element, $attrs) {
 
   firebase.auth().onAuthStateChanged(function(user) {
     if(user) {
-      console.log("User on");
       $scope.userOn = true;
       $scope.userEmail = user.email;
+      if(!user.displayName){
+        $element.find('#usernameModal').modal('show');
+      }
+      else{
+        $scope.displayName = user.displayName;
+      }
     }
     else{
-      console.log("No user");
       $scope.userOn = false;
     }
     $scope.$digest();
@@ -31,34 +35,48 @@ app.controller('myCtrl', function($scope, $window, $element, $attrs) {
     }
   }
   $scope.sendMessage = function() {
-    firebase.database().ref('chat').push({'user': $scope.userEmail, 'message': $scope.message});
+    firebase.database().ref('chat').push({'user': $scope.displayName ? $scope.displayName : $scope.userEmail, 'message': $scope.message});
   }
   $scope.createNewUser = function() {
-    firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password).catch(function(error) {
+    var failed = false;
+    firebase.auth().createUserWithEmailAndPassword($scope.signUpEmail, $scope.signUpPassword).catch(function(error) {
+
       //Handle Errors
       console.log("error code: " + error.code);
       console.log("error message: " + error.message);
-      $("#error").show();
+      $("#signUpError").show();
       $scope.errorText = error.message;
       $scope.$digest();
+      failed = true;
     });
   }
 
   $scope.signInUser = function() {
-    firebase.auth().signInWithEmailAndPassword($scope.email, $scope.password).catch(function(error) {
+    firebase.auth().signInWithEmailAndPassword($scope.signInEmail, $scope.signInPassword).catch(function(error) {
       //Handle Errors
       console.log("error code: " + error.code);
       console.log("error message: " + error.message);
       $scope.errorText = error.message;
-      $("#error").show();
+      $("#signInError").show();
       $scope.$digest();
     })
   }
   $scope.signOut = function() {
     firebase.auth().signOut().then(function() {
-      console.log("sign out successful");
+      //console.log("sign out successful");
     }, function(error) {
-      console.log("error message: " + error.message);
+      //console.log("error message: " + error.message);
     });
+  }
+  $scope.setUsername = function() {
+    firebase.auth().currentUser.updateProfile({displayName: $scope.signUpUsername})
+      .then(function() {
+          //success
+          $scope.displayName = $scope.signUpUsername;
+          $element.find('#usernameModal').modal('hide');
+      }, function(error) {
+        //error
+        console.log(error.message);
+      });
   }
 });
